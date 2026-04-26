@@ -158,5 +158,37 @@
       "assets/screens/restaurant_offline_metrics.png"
     ],
     "accent": "rose"
+  },
+  {
+    "id": "portfolio",
+    "title": "Portfolio Hub",
+    "subtitle": "GitHub Pages landing page for project evidence and recruiter review.",
+    "category": "Portfolio Engineering",
+    "repoKey": "portfolio",
+    "dataset": "Project metadata and generated artifacts",
+    "datasetScope": "All repositories under repos/",
+    "evidenceType": "GitHub Pages site",
+    "description": "A static portfolio site that presents project scope, metrics, generated figures, artifacts, publications, education, and profile links in a recruiter-facing interface.",
+    "highlights": [
+      "Responsive GitHub Pages build",
+      "Animated landing page with project evidence surfaces",
+      "Centralized config for profile, publications, education, and repository links"
+    ],
+    "metrics": [
+      { "label": "Repos shown", "value": "6" },
+      { "label": "Sections", "value": "8" },
+      { "label": "Deployment", "value": "Pages" }
+    ],
+    "evidence": [
+      "docs/index.html",
+      "docs/data/projects.json",
+      "docs/data/config.json"
+    ],
+    "cover": "assets/screens/atlas_eval_scorecard.png",
+    "gallery": [
+      "assets/screens/atlas_eval_scorecard.png",
+      "assets/screens/orion_spider_scorecard.png"
+    ],
+    "accent": "slate"
   }
 ]

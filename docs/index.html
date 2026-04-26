@@ -4,11 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rohit Aggarwal | AI/ML Systems Portfolio</title>
-    <meta name="description" content="AI/ML systems portfolio with RAG, agents, evaluation, simulation, and recommender systems." />
+    <meta name="description" content="AI/ML systems portfolio for Rohit Aggarwal with RAG, agents, evaluation, simulation, recommender systems, publications, and education." />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="stylesheet" href="css/styles.css" />
   </head>
   <body>
+    <canvas id="networkCanvas" aria-hidden="true"></canvas>
+
     <header class="site-header">
       <a class="brand" href="#top" aria-label="Portfolio home">
         <span class="brand__mark">RA</span>
@@ -19,42 +21,53 @@
       </a>
       <nav class="nav" aria-label="Primary navigation">
         <a href="#projects">Projects</a>
-        <a href="#evidence">Evidence</a>
-        <a href="#profile">Profile</a>
+        <a href="#publications">Publications</a>
+        <a href="#education">Education</a>
+        <a href="#contact">Contact</a>
       </nav>
       <div class="header-actions">
-        <a class="button button--ghost" id="resumeLink" href="#profile">Resume</a>
+        <a class="button button--ghost" id="resumeLink" href="assets/Rohit_Aggarwal_Resume.pdf" target="_blank" rel="noreferrer">Resume</a>
         <a class="button" id="githubLink" href="#" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </header>
 
     <main id="top">
       <section class="hero">
-        <div class="hero__media" aria-hidden="true">
-          <img src="assets/screens/atlas_eval_scorecard.png" alt="" />
-          <img src="assets/screens/orion_spider_scorecard.png" alt="" />
-          <img src="assets/screens/sentinel_truthfulqa_scorecard.png" alt="" />
-          <img src="assets/screens/rescue_trajectory_map.png" alt="" />
-        </div>
-        <div class="hero__overlay"></div>
-        <div class="hero__content">
-          <p class="eyebrow">AI systems portfolio</p>
-          <h1>Evaluation-led AI projects with real artifacts, metrics, and runnable code.</h1>
+        <div class="hero__copy">
+          <p class="eyebrow">Applied AI systems portfolio</p>
+          <h1>Building reliable AI systems with evidence, evaluation, and polished engineering.</h1>
           <p class="hero__lead" id="profileTagline">
-            Applied AI systems, retrieval, agents, evaluation, recommender systems, and simulation.
+            Applied AI engineer specializing in retrieval-augmented generation, tool-using agents, evaluation and safety regression, recommender systems, and simulation.
           </p>
           <div class="hero__actions">
-            <a class="button button--primary" href="#projects">View Projects</a>
-            <a class="button button--light" href="#evidence">See Evidence</a>
+            <a class="button button--primary" href="#projects">Explore Projects</a>
+            <a class="button button--light" href="#publications">View Publications</a>
           </div>
           <div class="hero__stats" id="heroStats"></div>
         </div>
+
+        <aside class="hero-card" aria-label="Profile summary">
+          <div class="portrait-ring">
+            <img id="profilePhoto" src="assets/rohit-aggarwal.jpg" alt="Rohit Aggarwal" />
+          </div>
+          <div class="hero-card__content">
+            <p class="eyebrow">Candidate profile</p>
+            <h2>Rohit Aggarwal</h2>
+            <p id="heroLocation">Roorkee, Uttarakhand, India</p>
+          </div>
+          <div class="orbit orbit--one"></div>
+          <div class="orbit orbit--two"></div>
+        </aside>
+      </section>
+
+      <section class="ticker" aria-label="Portfolio evidence ticker">
+        <div class="ticker__track" id="tickerTrack"></div>
       </section>
 
       <section class="section section--tight" id="evidence">
         <div class="section__intro">
-          <p class="eyebrow">Dataset-backed evidence</p>
-          <h2>Real dataset outputs where available; existing generated outputs for simulation and recommender work.</h2>
+          <p class="eyebrow">Evidence first</p>
+          <h2>Real dataset outputs for Orion, Atlas, and Sentinel. Existing generated outputs for Rescue and Restaurant.</h2>
         </div>
         <div class="evidence-strip" id="evidenceStrip"></div>
       </section>
@@ -62,40 +75,54 @@
       <section class="section" id="projects">
         <div class="section__intro section__intro--row">
           <div>
-            <p class="eyebrow">Projects</p>
-            <h2>Five focused systems across retrieval, agents, safety, simulation, and ranking.</h2>
+            <p class="eyebrow">GitHub repositories</p>
+            <h2>All repositories in the portfolio bundle, presented as recruiter-ready engineering work.</h2>
           </div>
           <div class="filters" id="filters"></div>
         </div>
         <div class="project-grid" id="projectGrid"></div>
       </section>
 
-      <section class="section section--split" id="profile">
-        <div>
-          <p class="eyebrow">Profile</p>
-          <h2 id="profileHeading">Rohit Aggarwal</h2>
-          <p class="profile-copy">
-            This portfolio emphasizes end-to-end engineering: dataset preparation, reproducible runs,
-            metrics, generated figures, APIs, UI surfaces, and clean GitHub-ready documentation.
-          </p>
-          <div class="profile-links" id="profileLinks"></div>
+      <section class="section gallery-section" id="visuals">
+        <div class="section__intro">
+          <p class="eyebrow">Generated visuals</p>
+          <h2>Project outputs, scorecards, trajectories, and evaluation figures.</h2>
         </div>
-        <div class="skill-board">
+        <div class="visual-grid" id="visualGrid"></div>
+      </section>
+
+      <section class="section section--split" id="publications">
+        <div>
+          <p class="eyebrow">Publications</p>
+          <h2>Research work in agentic mobility systems and social data analysis.</h2>
+        </div>
+        <div class="timeline-list" id="publicationList"></div>
+      </section>
+
+      <section class="section section--split" id="education">
+        <div>
+          <p class="eyebrow">Education</p>
+          <h2>Computer Science and Artificial Intelligence foundation.</h2>
+        </div>
+        <div class="timeline-list" id="educationList"></div>
+      </section>
+
+      <section class="section profile-section" id="contact">
+        <div class="profile-panel">
           <div>
-            <span>Retrieval</span>
-            <strong>Hybrid search, reranking, citations</strong>
+            <p class="eyebrow">Profile</p>
+            <h2 id="profileHeading">Rohit Aggarwal</h2>
+            <p class="profile-copy">
+              M.Tech CS-AI candidate at IIT Roorkee with hands-on AI/ML systems work across RAG,
+              LLM evaluation, tool-using agents, recommender systems, and multi-agent simulation.
+            </p>
+            <div class="profile-links" id="profileLinks"></div>
           </div>
-          <div>
-            <span>Agents</span>
-            <strong>Tool routing, guardrails, traces</strong>
-          </div>
-          <div>
-            <span>Evaluation</span>
-            <strong>Truthfulness, groundedness, safety checks</strong>
-          </div>
-          <div>
-            <span>Applied ML</span>
-            <strong>Recommenders and simulation metrics</strong>
+          <div class="skill-board">
+            <div><span>Retrieval</span><strong>Hybrid search, RRF, reranking, citations</strong></div>
+            <div><span>Agents</span><strong>Tool routing, guardrails, trace logging</strong></div>
+            <div><span>Evaluation</span><strong>Truthfulness, groundedness, safety gates</strong></div>
+            <div><span>Applied ML</span><strong>Recommenders, forecasting, simulation metrics</strong></div>
           </div>
         </div>
       </section>

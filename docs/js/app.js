@@ -61,6 +61,16 @@ function evidenceCard(project) {
   `;
 }
 
+function visualCard(project) {
+  const image = project.gallery?.[0] || project.cover;
+  return `
+    <button class="visual-card" data-project="${project.id}">
+      <img src="${image}" alt="${project.title} generated visual" loading="lazy" />
+      <div>${project.title}</div>
+    </button>
+  `;
+}
+
 function profileLinks(config) {
   const profile = config.profile || {};
   const username = profile.githubUsername || "<your-username>";
@@ -76,6 +86,17 @@ function profileLinks(config) {
     links.push(`<a class="button button--ghost" href="${profile.resumeUrl}" target="_blank" rel="noreferrer">Resume</a>`);
   }
   return links.join("");
+}
+
+function timelineItem(item) {
+  return `
+    <article class="timeline-item">
+      <span>${item.period || item.year || ""}</span>
+      <strong>${item.degree || item.title || item.role}</strong>
+      <p>${item.institution || item.authors || item.organization || ""}</p>
+      <p>${item.detail || item.venue || ""}</p>
+    </article>
+  `;
 }
 
 function openProject(project, config) {
@@ -126,6 +147,80 @@ function applyFilter(category) {
   });
 }
 
+function revealOnScroll() {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.14 },
+  );
+  qsa(".evidence-card, .project-card, .timeline-item, .visual-card").forEach((element) => observer.observe(element));
+}
+
+function renderTicker(projects) {
+  const items = projects
+    .map((project) => `<div class="ticker__item"><strong>${project.title}</strong><span>${project.datasetScope}</span></div>`)
+    .join("");
+  qs("#tickerTrack").innerHTML = items + items;
+}
+
+function animateNetwork() {
+  const canvas = qs("#networkCanvas");
+  const ctx = canvas.getContext("2d");
+  const points = Array.from({ length: 54 }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    vx: (Math.random() - 0.5) * 0.0007,
+    vy: (Math.random() - 0.5) * 0.0007,
+  }));
+
+  function resize() {
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;
+  }
+
+  function frame() {
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    ctx.lineWidth = window.devicePixelRatio;
+    points.forEach((point) => {
+      point.x += point.vx;
+      point.y += point.vy;
+      if (point.x < 0 || point.x > 1) point.vx *= -1;
+      if (point.y < 0 || point.y > 1) point.vy *= -1;
+    });
+
+    for (let i = 0; i < points.length; i += 1) {
+      for (let j = i + 1; j < points.length; j += 1) {
+        const a = points[i];
+        const b = points[j];
+        const dx = (a.x - b.x) * w;
+        const dy = (a.y - b.y) * h;
+        const distance = Math.hypot(dx, dy);
+        if (distance < 150 * window.devicePixelRatio) {
+          const alpha = 1 - distance / (150 * window.devicePixelRatio);
+          ctx.strokeStyle = `rgba(0, 124, 137, ${alpha * 0.35})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x * w, a.y * h);
+          ctx.lineTo(b.x * w, b.y * h);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  frame();
+}
+
 async function main() {
   const [config, projects] = await Promise.all([
     fetchJson("data/config.json"),
@@ -138,12 +233,14 @@ async function main() {
   qs("#profileTitle").textContent = profile.title || "AI/ML Engineer";
   qs("#profileTagline").textContent = profile.tagline || "";
   qs("#profileHeading").textContent = profile.name || "Rohit Aggarwal";
+  qs("#heroLocation").textContent = profile.location || "";
   qs("#githubLink").href = repoUrl(username);
   qs("#profileLinks").innerHTML = profileLinks(config);
   if (profile.resumeUrl) qs("#resumeLink").href = profile.resumeUrl;
+  if (profile.photo) qs("#profilePhoto").src = profile.photo;
 
   qs("#heroStats").innerHTML = [
-    { label: "Projects", value: projects.length },
+    { label: "Repositories", value: projects.length },
     { label: "Real dataset runs", value: 3 },
     { label: "TruthfulQA cases", value: "817" },
     { label: "Spider tasks", value: "7,000" },
@@ -151,16 +248,22 @@ async function main() {
     .map((item) => `<div class="stat"><span>${item.label}</span><strong>${item.value}</strong></div>`)
     .join("");
 
+  renderTicker(projects);
   qs("#evidenceStrip").innerHTML = projects.map(evidenceCard).join("");
   qs("#projectGrid").innerHTML = projects.map((project) => projectCard(project, config)).join("");
+  qs("#visualGrid").innerHTML = projects.map(visualCard).join("");
+  qs("#publicationList").innerHTML = (config.publications || []).map(timelineItem).join("");
+  qs("#educationList").innerHTML = (config.education || []).map(timelineItem).join("");
   renderFilters(projects);
+  revealOnScroll();
+  animateNetwork();
 
   qs("#filters").addEventListener("click", (event) => {
     const button = event.target.closest("[data-filter]");
     if (button) applyFilter(button.dataset.filter);
   });
 
-  qs("#projectGrid").addEventListener("click", (event) => {
+  document.body.addEventListener("click", (event) => {
     const button = event.target.closest("[data-project]");
     if (!button) return;
     const project = projects.find((item) => item.id === button.dataset.project);
