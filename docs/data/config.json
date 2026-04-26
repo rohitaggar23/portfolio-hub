@@ -1,0 +1,19 @@
+{
+  "profile": {
+    "name": "Rohit Aggarwal",
+    "title": "AI/ML Engineer",
+    "tagline": "Applied AI systems, retrieval, agents, evaluation, recommender systems, and simulation.",
+    "location": "India",
+    "githubUsername": "<your-username>",
+    "linkedin": "https://linkedin.com/in/<your-profile>",
+    "email": "<your-email>",
+    "resumeUrl": ""
+  },
+  "repos": {
+    "orion": "orion-tool-agent",
+    "atlas": "atlas-rag-copilot",
+    "sentinel": "sentinel-eval-safety-suite",
+    "rescue": "rescue-swarm-ai",
+    "recommender": "restaurant-hybrid-recommender"
+  }
+}
