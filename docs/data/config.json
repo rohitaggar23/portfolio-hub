@@ -2,12 +2,12 @@
   "profile": {
     "name": "Rohit Aggarwal",
     "title": "AI/ML Engineer",
-    "tagline": "Applied AI systems, retrieval, agents, evaluation, recommender systems, and simulation.",
+    "tagline": "LLM, NLP, RAG, Agents, recommender systems.",
     "location": "India",
-    "githubUsername": "<your-username>",
-    "linkedin": "https://linkedin.com/in/<your-profile>",
-    "email": "<your-email>",
-    "resumeUrl": ""
+    "githubUsername": "rohitaggar23",
+    "linkedin": "https://linkedin.com/in/rohitaggar23",
+    "email": "rohit_a1@mfs.iitr.ac.in",
+    "resumeUrl": "assets/Rohit_Aggarwal_Resume.pdf"
   },
   "repos": {
     "orion": "orion-tool-agent",
