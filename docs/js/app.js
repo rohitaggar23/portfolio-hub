@@ -99,6 +99,43 @@ function timelineItem(item) {
   `;
 }
 
+function skillCard(skill) {
+  return `
+    <article class="skill-card">
+      <div class="skill-card__top">
+        <span>${skill.name}</span>
+        <span>${skill.value}%</span>
+      </div>
+      <div class="skill-bar"><i style="width: ${skill.value}%"></i></div>
+    </article>
+  `;
+}
+
+function renderTerminal(profile) {
+  const username = profile.githubUsername || "rohitaggar23";
+  const lines = [
+    "$ whoami",
+    "> rohit_aggarwal",
+    "",
+    "$ cat focus.txt",
+    "> retrieval_augmented_generation",
+    "> tool_using_agents",
+    "> llm_evaluation_and_safety",
+    "> recommender_systems",
+    "",
+    "$ cat education.txt",
+    "> M.Tech CS-AI @ IIT Roorkee",
+    "> B.Tech CSAI @ IIIT Delhi",
+    "",
+    "$ git remote -v",
+    `> github.com/${username}`,
+    "",
+    "$ echo $STATUS",
+    "> building measured AI systems"
+  ];
+  qs("#terminalText").textContent = lines.join("\n");
+}
+
 function openProject(project, config) {
   const dialog = qs("#projectDialog");
   const content = qs("#dialogContent");
@@ -159,7 +196,7 @@ function revealOnScroll() {
     },
     { threshold: 0.14 },
   );
-  qsa(".evidence-card, .project-card, .timeline-item, .visual-card").forEach((element) => observer.observe(element));
+  qsa(".evidence-card, .project-card, .timeline-item, .visual-card, .skill-card").forEach((element) => observer.observe(element));
 }
 
 function renderTicker(projects) {
@@ -252,9 +289,19 @@ async function main() {
   qs("#evidenceStrip").innerHTML = projects.map(evidenceCard).join("");
   qs("#projectGrid").innerHTML = projects.map((project) => projectCard(project, config)).join("");
   qs("#visualGrid").innerHTML = projects.map(visualCard).join("");
+  qs("#skillsGrid").innerHTML = [
+    { name: "Python / ML Engineering", value: 95 },
+    { name: "RAG and Hybrid Retrieval", value: 92 },
+    { name: "LLM Evaluation and Safety", value: 90 },
+    { name: "FastAPI / Backend Systems", value: 86 },
+    { name: "PyTorch / Deep Learning", value: 84 },
+    { name: "SQL, pandas, NumPy", value: 88 },
+  ].map(skillCard).join("");
+  qs("#experienceList").innerHTML = (config.experience || []).map(timelineItem).join("");
   qs("#publicationList").innerHTML = (config.publications || []).map(timelineItem).join("");
   qs("#educationList").innerHTML = (config.education || []).map(timelineItem).join("");
   renderFilters(projects);
+  renderTerminal(profile);
   revealOnScroll();
   animateNetwork();
 
